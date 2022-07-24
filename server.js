@@ -1,9 +1,10 @@
-const dotenv = require("dotenv").config();
+const http = require('http');//utilisation du server http de nodeJs
 
-const http = require('http');
-const app = require('./app');
+const dotenv = require("dotenv").config();//utilisation des variables d'environnement, en mode developpement(fichier .env), pour plus de sécurité(mdp,URI).
 
-const normalizePort = val => {
+const app = require('./app');//inclure app.js
+
+const normalizePort = val => {//routine pour normaliser le numero du port pour davantage de stabilité
   const port = parseInt(val, 10);
 
   if (isNaN(port)) {
@@ -14,10 +15,10 @@ const normalizePort = val => {
   }
   return false;
 };
-const port = process.env.PORT || normalizePort('3000');
-app.set('port', port);
+const port = process.env.PORT || normalizePort('3000');//choisir le port d'écoute ou depuis les variables d'environnement sinon le port 3000
+app.set('port', port);//port définir le port sur laquelle l'application va s'executer
 
-const errorHandler = error => {
+const errorHandler = error => {//routine pour gérer d'éventuelles erreurs d'éxecution
   if (error.syscall !== 'listen') {
     throw error;
   }
@@ -25,11 +26,11 @@ const errorHandler = error => {
   const bind = typeof address === 'string' ? 'pipe ' + address : 'port: ' + port;
   switch (error.code) {
     case 'EACCES':
-      console.error(bind + ' requires elevated privileges.');
+      console.error(bind + ' autorisation insufisante.');
       process.exit(1);
       break;
     case 'EADDRINUSE':
-      console.error(bind + ' is already in use.');
+      console.error(bind + ' déja utilisé.');
       process.exit(1);
       break;
     default:
@@ -43,7 +44,7 @@ server.on('error', errorHandler);
 server.on('listening', () => {
   const address = server.address();
   const bind = typeof address === 'string' ? 'pipe ' + address : 'port ' + port;
-  console.log('Listening on ' + bind);
+  console.log('Server en écoute sur le  ' + bind);
 });
 
 server.listen(port);
